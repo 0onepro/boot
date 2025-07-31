@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: xss-telegram-bot
+    env: python
+    plan: free
+    buildCommand: |
+      # Install system dependencies
+      apt-get update && apt-get install -y wget curl git
+      
+      # Install Go
+      wget https://go.dev/dl/go1.22.5.linux-amd64.tar.gz
+      tar -C /usr/local -xzf go1.22.5.linux-amd64.tar.gz
+      export PATH=$PATH:/usr/local/go/bin
+      export GOPATH=$HOME/go
+      
+      # Clone XSS-Automation
+      git clone https://github.com/dirtycoder0124/XSS-Automation.git /opt/XSS-Automation
+      chmod +x /opt/XSS-Automation/xss_automation.sh
+      
+      # Install Python dependencies
+      pip install -r requirements.txt
+      
+      # Install Go tools
+      go install github.com/tomnomnom/waybackurls@latest
+      go install github.com/lc/gau/v2/cmd/gau@latest
+      go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+      go install github.com/projectdiscovery/httpx/cmd/httpx@latest
+      go install github.com/hahwul/dalfox/v2@latest
+      go install github.com/projectdiscovery/katana/cmd/katana@latest
+      
+    startCommand: python src/bot_main.py
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: XSS_SCRIPT_PATH
+        value: /opt/XSS-Automation/xss_automation.sh
+      - key: RESULTS_DIR
+        value: /opt/XSS-Automation/results
+      - key: PATH
+        value: $PATH:/usr/local/go/bin:$HOME/go/bin
+      - key: GOPATH
+        value: $HOME/go
+
