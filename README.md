@@ -79,5 +79,6 @@ python src/bot_main.py
 
 ## المطور
 
-تم تطوير هذا البوت بواسطة Manus AI
+تم تطوير هذا البوت بواسطة @helxsa @tohelx
+ 
 
